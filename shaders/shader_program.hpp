@@ -18,4 +18,9 @@ public:
 	ShaderProgram(std::vector<Shader> shaders);
 	~ShaderProgram();
 	void use();
+
+	void set(const char* uniform_name, bool val);
+	void set(const char* inform_name, int val);
+	void set(const char* uniform_name, float val);
+	void set(const char* uniform_name, const std::vector<float>& vals);
 };

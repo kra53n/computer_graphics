@@ -1,9 +1,9 @@
 #include "shader.hpp"
 
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <exception>
 
 Shader::Shader(const char* shader_path)
 {
