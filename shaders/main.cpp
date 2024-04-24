@@ -1,4 +1,5 @@
 #define _USE_MATH_DEFINES
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -87,6 +88,7 @@ int main()
 
 	shader_program.use();
 
+	int step = 0;
 	while (!glfwWindowShouldClose(window))
 	{
 		float time = glfwGetTime();
@@ -111,6 +113,7 @@ int main()
 		float x = sin(time);
 		float y = sin(time + M_PI / 3);
 		float z = sin(time - M_PI / 3);
+
 		// it is also good idea to play with x y z in vertices
 		float vertices[] = {
 				 .0f,         .5f, .0f,  x, y, z,
