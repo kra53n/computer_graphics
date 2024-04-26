@@ -19,22 +19,24 @@ public:
 		BACK,
 		LEFT,
 		RIGHT,
+		UP,
+		DOWN,
 	};
 
 private:
+	float
+		_yaw,
+		_pitch,
+		_movement_speed,
+		_mouse_sensetivity,
+		_zoom;
+
 	glm::vec3
 		_pos,
 		_front,
 		_up,
 		_right,
 		_world_up;
-
-	float
-		_yaw,
-		_pitch,
-		_movement_spped,
-		_mouse_sensetivity,
-		_zoom;
 
 public:
 	Camera();
@@ -50,9 +52,9 @@ public:
 
 	Camera(float yaw, float pitch);
 
-	void set_pos(glm::vec3 vec);
+	void set_pos(glm::vec3 val);
 	void set_pos(float x, float y, float z);
-	void set_up(glm::vec3 vec);
+	void set_up(glm::vec3 val);
 	void set_up(float x, float y, float z);
 	void set_yaw(float val);
 	void set_pitch(float val);
@@ -61,6 +63,9 @@ public:
 	void process_mouse_movement(float x_offset, float y_offset, GLboolean constrain_pitch = true);
 	void process_mouse_scroll(float y_offset);
 
+	glm::mat4 get_view();
+
 private:
+	inline void _init();
 	void _update();
 };
