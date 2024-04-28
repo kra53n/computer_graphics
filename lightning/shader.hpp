@@ -14,6 +14,7 @@ class Shader
 	const char* _get_shader_type_as_str();
 	std::string _read_file();
 	void _compile();
+
 public:
 	Shader(const char* shader_path);
 	~Shader();

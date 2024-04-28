@@ -64,6 +64,7 @@ public:
 	void process_mouse_scroll(float y_offset);
 
 	glm::mat4 get_view();
+	float get_zoom();
 
 private:
 	inline void _init();

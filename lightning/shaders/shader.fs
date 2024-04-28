@@ -1,20 +1,25 @@
 #version 330 core
 
-in vec2 tex_coord;
+in vec3 frag_pos;
+in vec3 normal;
 
-out vec4 FragColor;
+out vec4 frag_col;
 
-uniform sampler2D texture0;
-uniform sampler2D texture1;
-
-vec4 j_col;
+uniform vec3 light_pos;
+uniform vec3 obj_col, light_col;
 
 void main()
 {
-	j_col = vec4(1.1, 1.0, 1.0, 1.0);
-	FragColor = mix(
-		texture(texture0, tex_coord),
-		texture(texture1, tex_coord),
-		1./3
-	) * j_col;
+	float ambient_strength = 0.1;
+	vec3 ambient = ambient_strength * light_col;
+
+	vec3 norm = normalize(normal);
+	vec3 light_dir = normalize(light_pos - frag_pos);
+	float diff = max(dot(norm, light_dir), 0.0);
+	vec3 diffuse = diff * light_col;
+	
+	// vec3 res = (frag_pos * 0.2 - ambient + diffuse ) * obj_col;
+	vec3 res = (ambient + diffuse) * obj_col;
+	frag_col = vec4(res, 1.0);
+	// frag_col = vec4(frag_pos, 1.0);
 }

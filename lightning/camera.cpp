@@ -151,6 +151,11 @@ glm::mat4 Camera::get_view()
 	return glm::lookAt(_pos, _pos + _front, _up);
 }
 
+float Camera::get_zoom()
+{
+	return  _zoom;
+}
+
 inline void Camera::_update()
 {
 	glm::vec3 new_front;
