@@ -108,9 +108,9 @@ void ShaderProgram::set(Texture texture)
     _textures.push_back(texture);
 }
 
-void ShaderProgram::set(const std::vector<Texture>& textures)
+void ShaderProgram::set(std::vector<Texture> textures)
 {
-    for (Texture t : textures) set(t);
+    for (Texture& t : textures) set(t);
 }
 
 void ShaderProgram::_activate_textures()

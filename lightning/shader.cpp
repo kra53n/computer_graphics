@@ -95,8 +95,9 @@ void Shader::_compile()
     {
         glGetShaderInfoLog(_ID, 512, NULL, info_log);
         printf(
-            "ERROR::SHADER::%s::COMPILATION_FAILED\n%s\n",
+            "ERROR::SHADER::%s::%s::COMPILATION_FAILED\n%s\n",
             _get_shader_type_as_str(),
+			_path,
             info_log
         );
     }

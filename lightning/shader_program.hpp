@@ -35,5 +35,5 @@ public:
 	void set(const char* uniform_name, const glm::mat4& val);
 
 	void set(Texture texture);
-	void set(const std::vector<Texture>& texture);
+	void set(std::vector<Texture> texture);
 };

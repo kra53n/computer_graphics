@@ -146,6 +146,11 @@ void Camera::process_mouse_scroll(float y_offset)
 	if (_zoom > 45.0f) _zoom = 45.0f;
 }
 
+glm::vec3 Camera::get_pos()
+{
+	return _pos;
+}
+
 glm::mat4 Camera::get_view()
 {
 	return glm::lookAt(_pos, _pos + _front, _up);

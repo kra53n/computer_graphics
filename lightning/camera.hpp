@@ -63,6 +63,7 @@ public:
 	void process_mouse_movement(float x_offset, float y_offset, GLboolean constrain_pitch = true);
 	void process_mouse_scroll(float y_offset);
 
+	glm::vec3 get_pos();
 	glm::mat4 get_view();
 	float get_zoom();
 
