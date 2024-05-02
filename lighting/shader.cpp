@@ -53,7 +53,7 @@ const char* Shader::_get_shader_type_as_str()
     switch (_get_shader_type())
     {
     case GL_VERTEX_SHADER: return "VERTEX";
-    case GL_FRAGMENT_SHADER: return "SHADER";
+    case GL_FRAGMENT_SHADER: return "FRAGMENT";
     }
 }
 
@@ -74,7 +74,7 @@ std::string Shader::_read_file()
         content = string_stream.str();
     }
     catch (std::ifstream::failure e) {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+        printf("ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ\n");
     }
 
     return content;

@@ -239,7 +239,7 @@ int main()
 		shader_program.set("view_pos", g_camera.get_pos());
 		// shader_program.set("material.ambient", { 1.0f, 0.5f, 0.31f });
 		// shader_program.set("material.diffuse", { 1.0f, 0.5f, 0.31f });
-		shader_program.set("material.specular", { 0.5f, 0.5f, 0.5f });
+		// shader_program.set("material.specular", { 0.5f, 0.5f, 0.5f });
 		shader_program.set("material.shininess", 32.0f);
 
 		glm::vec3 light_col = {
@@ -256,6 +256,9 @@ int main()
 		shader_program.set("light.ambient", ambient_col);
 		shader_program.set("light.diffuse", diffuse_col);
 		shader_program.set("light.specular", { 1.0f, 1.0f, 1.0f });
+		shader_program.set("light.constant", 1.0f);
+		shader_program.set("light.linear", 0.09f);
+		shader_program.set("light.quad", 0.032f);
 
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = glm::mat4(1.0f);

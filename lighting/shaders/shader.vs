@@ -16,8 +16,8 @@ void main()
 {
 	gl_Position = pv * m * vec4(a_pos, 1.0);
 
-	frag_pos = vec3(vm * vec4(a_pos, 1.0));
-	normal = mat3(transpose(inverse(vm))) * a_normal;
+	frag_pos = vec3(m * vec4(a_pos, 1.0));
+	normal = mat3(transpose(inverse(m))) * a_normal;
 	view_light_pos = vec3(v * vec4(light_pos, 1.0));
 	tex_coords = a_tex_coords;
 }
