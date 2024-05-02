@@ -14,7 +14,6 @@ public:
 	Texture(
 		const char* path,
 		const char* unfirom_name,
-		GLenum format,
 		GLenum wrap_option = GL_REPEAT,
 		bool flip = true
 	);
@@ -22,3 +21,6 @@ public:
 	const char* get_uniform_name();
 	GLuint ID();
 };
+
+
+int get_texture_format(int nr_channels);
