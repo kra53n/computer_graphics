@@ -64,6 +64,7 @@ public:
 	void process_mouse_scroll(float y_offset);
 
 	glm::vec3 get_pos();
+	glm::vec3 get_front();
 	glm::mat4 get_view();
 	float get_zoom();
 

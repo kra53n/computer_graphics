@@ -252,7 +252,10 @@ int main()
 		};
 		glm::vec3 diffuse_col = light_col * glm::vec3(0.5f);
 		glm::vec3 ambient_col = diffuse_col * glm::vec3(0.2f);
-		shader_program.set("light.pos", light_pos);
+		shader_program.set("light.pos", g_camera.get_pos());
+		shader_program.set("light.dir", g_camera.get_front());
+		shader_program.set("light.cut_off", glm::cos(glm::radians(12.5f)));
+		shader_program.set("light.outer_cut_off", glm::cos(glm::radians(17.5f)));
 		shader_program.set("light.ambient", ambient_col);
 		shader_program.set("light.diffuse", diffuse_col);
 		shader_program.set("light.specular", { 1.0f, 1.0f, 1.0f });

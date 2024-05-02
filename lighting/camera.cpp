@@ -151,6 +151,11 @@ glm::vec3 Camera::get_pos()
 	return _pos;
 }
 
+glm::vec3 Camera::get_front()
+{
+	return _front;
+}
+
 glm::mat4 Camera::get_view()
 {
 	return glm::lookAt(_pos, _pos + _front, _up);
