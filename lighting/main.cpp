@@ -2,6 +2,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -12,9 +13,10 @@
 #include <stb_image.h>
 
 #include "camera.hpp"
+#include "entity.hpp"
+#include "lights.hpp"
 #include "texture.hpp"
 #include "shader_program.hpp"
-
 
 #define WIN_WDT 800
 #define WIN_HGT 600
@@ -137,6 +139,10 @@ int main()
 
 	//
 
+	add_lights();
+	DirLight* light = (DirLight*)get_entity(0);
+	//
+
 	float vertices[] = {
         // positions          // normals           // texture coords
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
@@ -237,31 +243,11 @@ int main()
 		shader_program.set("light_col", { 1.0f, 1.0f, 1.0f });
 		shader_program.set("light_pos", light_pos);
 		shader_program.set("view_pos", g_camera.get_pos());
-		// shader_program.set("material.ambient", { 1.0f, 0.5f, 0.31f });
-		// shader_program.set("material.diffuse", { 1.0f, 0.5f, 0.31f });
-		// shader_program.set("material.specular", { 0.5f, 0.5f, 0.5f });
 		shader_program.set("material.shininess", 32.0f);
 
-		glm::vec3 light_col = {
-			// (float)sin(glfwGetTime() * 2.0),
-			// (float)sin(glfwGetTime() * 0.7),
-			// (float)sin(glfwGetTime() * 1.3),
-			1.0f,
-			1.0f,
-			1.0f,
-		};
-		glm::vec3 diffuse_col = light_col * glm::vec3(0.5f);
-		glm::vec3 ambient_col = diffuse_col * glm::vec3(0.2f);
-		shader_program.set("light.pos", g_camera.get_pos());
-		shader_program.set("light.dir", g_camera.get_front());
-		shader_program.set("light.cut_off", glm::cos(glm::radians(12.5f)));
-		shader_program.set("light.outer_cut_off", glm::cos(glm::radians(17.5f)));
-		shader_program.set("light.ambient", ambient_col);
-		shader_program.set("light.diffuse", diffuse_col);
-		shader_program.set("light.specular", { 1.0f, 1.0f, 1.0f });
-		shader_program.set("light.constant", 1.0f);
-		shader_program.set("light.linear", 0.09f);
-		shader_program.set("light.quad", 0.032f);
+		set_lights_for_shader_program(&shader_program);
+		shader_program.set("spot_lights[0].pos", g_camera.get_pos());
+		shader_program.set("spot_lights[0].dir", g_camera.get_front());
 
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = glm::mat4(1.0f);

@@ -79,19 +79,6 @@ void ShaderProgram::set(const char* uniform_name, float val)
     fill_uniform(glUniform1f, val);
 }
 
-//void ShaderProgram::set(const char* uniform_name, const std::vector<float>& vals)
-//{
-//    switch (vals.size())
-//    {
-//    case 1: fill_uniform(glUniform1f, vals[0]); break;
-//    case 2: fill_uniform(glUniform2f, vals[0], vals[1]); break;
-//    case 3: fill_uniform(glUniform3f, vals[0], vals[1], vals[2]); break;
-//    case 4: fill_uniform(glUniform4f, vals[0], vals[1], vals[2], vals[3]); break;
-//    default:
-//        throw std::exception("invalid size for uniform float vec");
-//    }
-//}
-
 void ShaderProgram::set(const char* uniform_name, const glm::vec3& val)
 {
     fill_uniform(glUniform3f, val[0], val[1], val[2]);

@@ -30,7 +30,6 @@ public:
 	void set(const char* uniform_name, bool val);
 	void set(const char* inform_name, int val);
 	void set(const char* uniform_name, float val);
-	//void set(const char* uniform_name, const std::vector<float>& vals);
 	void set(const char* uniform_name, const glm::vec3& val);
 	void set(const char* uniform_name, const glm::mat4& val);
 
