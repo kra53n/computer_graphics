@@ -28,11 +28,11 @@ public:
 
 	std::vector<Vertex> verts;
 	std::vector<GLuint> indices;
-	std::vector<Texture> textures;
+	std::vector<Texture*> textures;
 
 	GLuint VAO;
 
-	Mesh(std::vector<Vertex> verts, std::vector<GLuint> indices, std::vector<Texture> textures);
+	Mesh(std::vector<Vertex> verts, std::vector<GLuint> indices, std::vector<Texture*> textures);
 
 	void draw(ShaderProgram* sp);
 

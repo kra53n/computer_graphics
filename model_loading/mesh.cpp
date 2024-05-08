@@ -5,7 +5,7 @@
 Mesh::Mesh(
 	std::vector<Mesh::Vertex> verts,
 	std::vector<GLuint> indices,
-	std::vector<Mesh::Texture> textures
+	std::vector<Mesh::Texture*> textures
 ) {
 	this->verts = verts;
 	this->indices = indices;
@@ -55,7 +55,7 @@ void Mesh::draw(ShaderProgram* sp)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 		std::string number;
-		std::string name = textures[i].type;
+		std::string name = textures[i]->type;
 		if (name == "texture_diffuse")
 			number = std::to_string(diffuse_nr++);
 		else if (name == "texture_specular")
@@ -66,7 +66,7 @@ void Mesh::draw(ShaderProgram* sp)
 			number = std::to_string(height_nr++);
 
 		sp->set((name + number).c_str(), i);
-		glBindTexture(GL_TEXTURE_2D, textures[i].id);
+		glBindTexture(GL_TEXTURE_2D, textures[i]->id);
 	}
 
 	glBindVertexArray(VAO);
