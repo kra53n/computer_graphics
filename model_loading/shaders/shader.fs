@@ -54,6 +54,7 @@ struct SpotLight {
 uniform Material material;
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_specular1;
+uniform sampler2D texture_normal1;
 
 uniform int nr_dir_lights;
 uniform int nr_point_lights;
@@ -90,7 +91,8 @@ vec3 calc_dir_light(DirLight light, vec3 normal, vec3 view_dir)
     float diff = max(dot(normal, light_dir), 0.0);
 
     vec3 reflect_dir = reflect(-light_dir, normal);
-    float spec = pow(max(dot(view_dir, reflect_dir), 0.0), material.shininess);
+    // float spec = pow(max(dot(view_dir, reflect_dir), 0.0), material.shininess);
+    float spec = pow(max(dot(view_dir, reflect_dir), 0.0), 2);
 
     vec3 ambient = light.ambient * vec3(texture(texture_diffuse1, tex_coords));
     vec3 diffuse = light.diffuse * diff * vec3(texture(texture_diffuse1, tex_coords));
@@ -110,7 +112,6 @@ vec3 calc_point_light(PointLight light, vec3 normal, vec3 frag_pos, vec3 view_di
 
     float distance = length(light.pos - frag_pos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quad * (distance * distance));    
-
     vec3 ambient = light.ambient * vec3(texture(texture_diffuse1, tex_coords));
     vec3 diffuse = light.diffuse * diff * vec3(texture(texture_diffuse1, tex_coords));
     vec3 specular = light.specular * spec * vec3(texture(texture_specular1, tex_coords));

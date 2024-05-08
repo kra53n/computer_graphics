@@ -12,7 +12,7 @@ void add_lights()
 			{ 0.5f, 0.5f, 0.5f }
 		),
 		new PointLight(
-			{ 0.0f, 0.0f, 0.0f },
+			{ 0.0f, 2.0f, 3.0f },
 			{ 0.05f, 0.05f, 0.05f },
 			{ 0.8f, 0.8f, 0.8f },
 			{ 1.0f, 1.0f, 1.0f },
@@ -99,7 +99,7 @@ void DirLight::set_for_shader_program(ShaderProgram* sp, int idx)
 	sp->set((s + "dir").c_str(), _dir);
 	sp->set((s + "ambient").c_str(), _ambient);
 	sp->set((s + "diffuse").c_str(), _diffuse);
-	sp->set((s + "spec").c_str(), _spec);
+	sp->set((s + "specular").c_str(), _spec);
 }
 
 
@@ -131,7 +131,7 @@ void PointLight::set_for_shader_program(ShaderProgram* sp, int idx)
 	sp->set((s + "pos").c_str(), _pos);
 	sp->set((s + "ambient").c_str(), _ambient);
 	sp->set((s + "diffuse").c_str(), _diffuse);
-	sp->set((s + "spec").c_str(), _spec);
+	sp->set((s + "specular").c_str(), _spec);
 	sp->set((s + "constant").c_str(), _constant);
 	sp->set((s + "linear").c_str(), _linear);
 	sp->set((s + "quad").c_str(), _quadratic);
@@ -172,7 +172,7 @@ void SpotLight::set_for_shader_program(ShaderProgram* sp, int idx)
 	sp->set((s + "dir").c_str(), _dir);
 	sp->set((s + "ambient").c_str(), _ambient);
 	sp->set((s + "diffuse").c_str(), _diffuse);
-	sp->set((s + "spec").c_str(), _spec);
+	sp->set((s + "specular").c_str(), _spec);
 	sp->set((s + "constant").c_str(), _constant);
 	sp->set((s + "linear").c_str(), _linear);
 	sp->set((s + "quad").c_str(), _quadratic);
