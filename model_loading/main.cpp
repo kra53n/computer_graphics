@@ -170,9 +170,19 @@ int main()
 		shader_program.set("view_pos", g_camera.get_pos());
 		shader_program.set("material.shininess", 32.0f);
 
+		auto objs = get_entities(Entity::Group::Light);
+		for (auto it = objs->begin(); it != objs->end(); it++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			ILight* light = (ILight*)(it->second);
+			if (light->type != Light::PointLight) continue;
+			PointLight* pl = (PointLight*)light;
+			pl->rotate(glm::radians(1.f), { 0, 0, -10 });
+		}
 		set_lights_for_shader_program(&shader_program);
 		//shader_program.set("spot_lights[0].pos", g_camera.get_pos());
 		//shader_program.set("spot_lights[0].dir", g_camera.get_front());
+
 
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = glm::mat4(1.0f);
@@ -187,6 +197,7 @@ int main()
 		shader_program.set("pv", pv);
 		shader_program.set(diffuse_map);
 		shader_program.set(specular_map);
+
 		
 		bp_model.draw(&shader_program);
 

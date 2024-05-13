@@ -1,16 +1,17 @@
 #include "lights.hpp"
 
 #include <string>
+#include <cmath>
 
 void add_lights()
 {
 	std::vector<ILight*> lights = {
-		new DirLight(
-			{ -0.2f, -1.0f, -0.3f },
-			{ 0.05f, 0.05f, 0.05f },
-			{ 0.4f, 0.4f, 0.4f },
-			{ 0.5f, 0.5f, 0.5f }
-		),
+		//new DirLight(
+		//	{ -0.2f, -1.0f, -0.3f },
+		//	{ 0.05f, 0.05f, 0.05f },
+		//	{ 0.4f, 0.4f, 0.4f },
+		//	{ 0.5f, 0.5f, 0.5f }
+		//),
 		new PointLight(
 			{ 0.0f, 2.0f, 3.0f },
 			{ 0.05f, 0.05f, 0.05f },
@@ -21,14 +22,23 @@ void add_lights()
 			0.032f
 		),
 		new PointLight(
-			{ 2.0f, 1.0f, -3.0f },
-			{ 0.15f, 0.05f, 0.05f },
-			{ 0.8f, 0.5f, 0.5f },
+			{ 2.0f, 0.0f, 0.0f },
+			{ 0.05f, 0.05f, 0.05f },
+			{ 0.7f, 0.8f, 0.9f },
 			{ 1.0f, 1.0f, 1.0f },
 			1.0f,
 			0.09f,
 			0.032f
 		),
+		//new PointLight(
+		//	{ 2.0f, 1.0f, -3.0f },
+		//	{ 0.15f, 0.05f, 0.05f },
+		//	{ 0.8f, 0.5f, 0.5f },
+		//	{ 1.0f, 1.0f, 1.0f },
+		//	1.0f,
+		//	0.09f,
+		//	0.032f
+		//),
 		//new SpotLight(
 		//	{ 0.0f, 0.0f, 0.0f },
 		//	{ 0.0f, 0.0f, 0.0f },
@@ -41,18 +51,18 @@ void add_lights()
 		//	glm::cos(glm::radians(12.5f)),
 		//	glm::cos(glm::radians(15.0f))
 		//),
-		new SpotLight(
-			{ 0.0f, 0.0f, 0.0f },
-			{ 0.1f, 0.0f, 0.0f },
-			{ 0.0f, 0.0f, 0.0f },
-			{ 0.4f, 0.4f, 1.0f },
-			{ 0.4f, 0.4f, 1.0f },
-			1.0f,
-			0.09f,
-			0.032f,
-			glm::cos(glm::radians(12.5f)),
-			glm::cos(glm::radians(15.0f))
-		)
+		//new SpotLight(
+		//	{ 0.0f, 0.0f, 0.0f },
+		//	{ 0.1f, 0.0f, 0.0f },
+		//	{ 0.0f, 0.0f, 0.0f },
+		//	{ 0.4f, 0.4f, 1.0f },
+		//	{ 0.4f, 0.4f, 1.0f },
+		//	1.0f,
+		//	0.09f,
+		//	0.032f,
+		//	glm::cos(glm::radians(12.5f)),
+		//	glm::cos(glm::radians(15.0f))
+		//)
 	};
 	for (ILight* light : lights)
 		add_entity(Entity::Group::Light, light);
@@ -114,7 +124,7 @@ PointLight::PointLight(
 ) {
 	group = Entity::Group::Light;
 	type = Light::PointLight;
-	_pos = pos;
+	this->pos = pos;
 	_ambient = ambient;
 	_diffuse = diffuse;
 	_spec = spec;
@@ -123,12 +133,24 @@ PointLight::PointLight(
 	_quadratic = quadratic;
 }
 
+void PointLight::rotate(float angle, glm::vec3 about)
+{
+	glm::vec3 diff = pos - about;
+	float len_yx = sqrt(diff.x * diff.x + diff.y * diff.y);
+	float len_yz = sqrt(diff.y * diff.y + diff.z * diff.z);
+	float prev_angle_yx = atan2(diff.y, diff.x);
+	float prev_angle_yz = atan2(diff.y, diff.z);
+	pos.x = cos(prev_angle_yx + angle) * len_yx;
+	pos.y = sin(prev_angle_yx + angle) * len_yx;
+	pos.z = sin(prev_angle_yz + angle) * len_yz;
+}
+
 void PointLight::set_for_shader_program(ShaderProgram* sp, int idx)
 {
 	std::string s = "point_lights[";
 	s += std::to_string(idx);
 	s += "].";
-	sp->set((s + "pos").c_str(), _pos);
+	sp->set((s + "pos").c_str(), pos);
 	sp->set((s + "ambient").c_str(), _ambient);
 	sp->set((s + "diffuse").c_str(), _diffuse);
 	sp->set((s + "specular").c_str(), _spec);

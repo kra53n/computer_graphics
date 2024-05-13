@@ -38,7 +38,6 @@ public:
 class PointLight : public ILight
 {
 	glm::vec3
-		_pos,
 		_ambient,
 		_diffuse,
 		_spec;
@@ -49,6 +48,8 @@ class PointLight : public ILight
 		_quadratic;
 
 public:
+	glm::vec3 pos;
+
 	PointLight(
 		glm::vec3 pos,
 		glm::vec3 ambient,
@@ -58,6 +59,7 @@ public:
 		float linear,
 		float quadratic
 	);
+	void rotate(float angle, glm::vec3 about);
 	void set_for_shader_program(ShaderProgram* sp, int idx);
 };
 
