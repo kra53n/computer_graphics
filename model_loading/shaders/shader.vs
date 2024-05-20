@@ -19,5 +19,5 @@ void main()
 	frag_pos = vec3(m * vec4(a_pos, 1.0));
 	normal = mat3(transpose(inverse(m))) * a_normal;
 	view_light_pos = vec3(v * vec4(light_pos, 1.0));
-	tex_coords = a_tex_coords;
+	tex_coords = a_tex_coords * vec2(1, -1);
 }

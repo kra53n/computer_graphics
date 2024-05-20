@@ -6,63 +6,63 @@
 void add_lights()
 {
 	std::vector<ILight*> lights = {
-		//new DirLight(
-		//	{ -0.2f, -1.0f, -0.3f },
-		//	{ 0.05f, 0.05f, 0.05f },
-		//	{ 0.4f, 0.4f, 0.4f },
-		//	{ 0.5f, 0.5f, 0.5f }
-		//),
-		new PointLight(
-			{ 0.0f, 2.0f, 3.0f },
+		new DirLight(
+			{ -0.2f, -1.0f, -0.3f },
 			{ 0.05f, 0.05f, 0.05f },
-			{ 0.8f, 0.8f, 0.8f },
+			{ 0.4f, 0.4f, 0.4f },
+			{ 0.5f, 0.5f, 0.5f }
+		),
+		// new PointLight(
+		// 	{ 0.0f, 2.0f, 3.0f },
+		// 	{ 0.05f, 0.05f, 0.05f },
+		// 	{ 0.8f, 0.8f, 0.8f },
+		// 	{ 1.0f, 1.0f, 1.0f },
+		// 	1.0f,
+		// 	0.09f,
+		// 	0.032f
+		// ),
+		// new PointLight(
+		// 	{ 2.0f, 0.0f, 0.0f },
+		// 	{ 0.05f, 0.05f, 0.05f },
+		// 	{ 0.7f, 0.8f, 0.9f },
+		// 	{ 1.0f, 1.0f, 1.0f },
+		// 	1.0f,
+		// 	0.09f,
+		// 	0.032f
+		// ),
+		new PointLight(
+			{ 2.0f, 1.0f, -3.0f },
+			{ 0.15f, 0.05f, 0.05f },
+			{ 0.8f, 0.5f, 0.5f },
 			{ 1.0f, 1.0f, 1.0f },
 			1.0f,
 			0.09f,
 			0.032f
 		),
-		new PointLight(
-			{ 2.0f, 0.0f, 0.0f },
-			{ 0.05f, 0.05f, 0.05f },
-			{ 0.7f, 0.8f, 0.9f },
+		new SpotLight(
+			{ 0.0f, 0.0f, 0.0f },
+			{ 0.0f, 0.0f, 0.0f },
+			{ 0.0f, 0.0f, 0.0f },
+			{ 1.0f, 1.0f, 1.0f },
 			{ 1.0f, 1.0f, 1.0f },
 			1.0f,
 			0.09f,
-			0.032f
+			0.032f,
+			glm::cos(glm::radians(12.5f)),
+			glm::cos(glm::radians(15.0f))
 		),
-		//new PointLight(
-		//	{ 2.0f, 1.0f, -3.0f },
-		//	{ 0.15f, 0.05f, 0.05f },
-		//	{ 0.8f, 0.5f, 0.5f },
-		//	{ 1.0f, 1.0f, 1.0f },
-		//	1.0f,
-		//	0.09f,
-		//	0.032f
-		//),
-		//new SpotLight(
-		//	{ 0.0f, 0.0f, 0.0f },
-		//	{ 0.0f, 0.0f, 0.0f },
-		//	{ 0.0f, 0.0f, 0.0f },
-		//	{ 1.0f, 1.0f, 1.0f },
-		//	{ 1.0f, 1.0f, 1.0f },
-		//	1.0f,
-		//	0.09f,
-		//	0.032f,
-		//	glm::cos(glm::radians(12.5f)),
-		//	glm::cos(glm::radians(15.0f))
-		//),
-		//new SpotLight(
-		//	{ 0.0f, 0.0f, 0.0f },
-		//	{ 0.1f, 0.0f, 0.0f },
-		//	{ 0.0f, 0.0f, 0.0f },
-		//	{ 0.4f, 0.4f, 1.0f },
-		//	{ 0.4f, 0.4f, 1.0f },
-		//	1.0f,
-		//	0.09f,
-		//	0.032f,
-		//	glm::cos(glm::radians(12.5f)),
-		//	glm::cos(glm::radians(15.0f))
-		//)
+		new SpotLight(
+			{ 0.0f, 0.0f, 0.0f },
+			{ 0.1f, 0.0f, 0.0f },
+			{ 0.0f, 0.0f, 0.0f },
+			{ 0.4f, 0.4f, 1.0f },
+			{ 0.4f, 0.4f, 1.0f },
+			1.0f,
+			0.09f,
+			0.032f,
+			glm::cos(glm::radians(12.5f)),
+			glm::cos(glm::radians(15.0f))
+		)
 	};
 	for (ILight* light : lights)
 		add_entity(Entity::Group::Light, light);
