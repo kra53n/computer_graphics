@@ -1,5 +1,8 @@
 #include "model.hpp"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 
@@ -9,15 +12,22 @@ Model::Model(const char* path, const char* filename)
 {
 	_path = path;
 	_load_model(filename);
+
+	float angle = -M_PI / 2;
+	rotation_matrix_for_screen_texture = glm::mat2(
+		cos(angle), -sin(angle),
+		sin(angle), cos(angle)
+	);
 }
 
 Model::~Model()
 {
-	for (Mesh::Texture* texture : _textures) delete texture;
+	for (Mesh::MTexture* texture : _textures) delete texture;
 }
 
 void Model::draw(ShaderProgram* sp)
 {
+	sp->set("rotation_matrix_for_screen_texture", rotation_matrix_for_screen_texture);
 	for(unsigned int i = 0; i < _meshes.size(); i++)
 		_meshes[i].draw(sp);
 }
@@ -58,7 +68,7 @@ Mesh Model::_process_mesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Mesh::Vertex> verts;
 	std::vector<unsigned> indices;
-	std::vector<Mesh::Texture*> textures;
+	std::vector<Mesh::MTexture*> textures;
 
 	for (unsigned i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -109,28 +119,28 @@ Mesh Model::_process_mesh(aiMesh* mesh, const aiScene* scene)
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];    
 	Mesh::Vertex::Type verts_type = Mesh::Vertex::Type::Other;
 
-	std::vector<Mesh::Texture*> diffuse_maps = _load_material_textures(material, aiTextureType_DIFFUSE, "texture_diffuse", &verts_type);
+	std::vector<Mesh::MTexture*> diffuse_maps = _load_material_textures(material, aiTextureType_DIFFUSE, "texture_diffuse", &verts_type);
 	textures.insert(textures.end(), diffuse_maps.begin(), diffuse_maps.end());
 
-	std::vector<Mesh::Texture*> specular_maps = _load_material_textures(material, aiTextureType_SPECULAR, "texture_specular", &verts_type);
+	std::vector<Mesh::MTexture*> specular_maps = _load_material_textures(material, aiTextureType_SPECULAR, "texture_specular", &verts_type);
 	textures.insert(textures.end(), specular_maps.begin(), specular_maps.end());
 
-	std::vector<Mesh::Texture*> normal_maps = _load_material_textures(material, aiTextureType_HEIGHT, "texture_normal", &verts_type);
+	std::vector<Mesh::MTexture*> normal_maps = _load_material_textures(material, aiTextureType_HEIGHT, "texture_normal", &verts_type);
 	textures.insert(textures.end(), normal_maps.begin(), normal_maps.end());
 
-	std::vector<Mesh::Texture*> height_maps = _load_material_textures(material, aiTextureType_AMBIENT, "texture_height", &verts_type);
+	std::vector<Mesh::MTexture*> height_maps = _load_material_textures(material, aiTextureType_AMBIENT, "texture_height", &verts_type);
 	textures.insert(textures.end(), height_maps.begin(), height_maps.end());
 
 	return Mesh(verts, verts_type, indices, textures);
 }
 
-std::vector<Mesh::Texture*> Model::_load_material_textures(
+std::vector<Mesh::MTexture*> Model::_load_material_textures(
 	aiMaterial* mat,
 	aiTextureType type,
 	const char* type_name,
 	Mesh::Vertex::Type* verts_type
 ) {
-	std::vector<Mesh::Texture*> textures;
+	std::vector<Mesh::MTexture*> textures;
 	for (unsigned i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		textures.push_back(_load_material_texture(mat, type, type_name, verts_type, i));
@@ -138,14 +148,14 @@ std::vector<Mesh::Texture*> Model::_load_material_textures(
 	return textures;
 }
 
-Mesh::Texture* Model::_load_material_texture(
+Mesh::MTexture* Model::_load_material_texture(
 	aiMaterial* mat,
 	aiTextureType type,
 	const char* type_name,
 	Mesh::Vertex::Type* verts_type,
 	int idx
 ) {
-	Mesh::Texture* texture = new Mesh::Texture;
+	Mesh::MTexture* texture = new Mesh::MTexture;
 	aiString str;
 	mat->GetTexture(type, idx, &str);
 

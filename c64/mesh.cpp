@@ -2,11 +2,14 @@
 
 #include <string>
 
+#include "entity.hpp"
+#include "texture.hpp"
+
 Mesh::Mesh(
 	std::vector<Mesh::Vertex> verts,
 	Vertex::Type verts_type,
 	std::vector<GLuint> indices,
-	std::vector<Mesh::Texture*> textures
+	std::vector<Mesh::MTexture*> textures
 ) {
 	this->verts = verts;
 	this->verts_type = verts_type;
@@ -53,7 +56,8 @@ void Mesh::draw(ShaderProgram* sp)
 	GLuint specular_nr = 1;
 	GLuint normal_nr = 1;
 	GLuint height_nr = 1;
-	for(int i = 0; i < textures.size(); i++)
+	int i;
+	for(i = 0; i < textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 		std::string number;
@@ -72,6 +76,23 @@ void Mesh::draw(ShaderProgram* sp)
 	}
 
 	sp->set("verts_type", (int)verts_type);
+	if (verts_type == Mesh::Vertex::Type::Screen)
+	{
+		std::unordered_map<GLuint, Entity*>* textures = get_entities(Entity::Group::Texture);
+		int screen_texture_id = 0;
+		for (auto it : *textures)
+		{
+			Texture* texture = (Texture*)it.second;
+			if (strcmp(texture->name, "goku") == 0)
+			{
+				screen_texture_id = texture->texture_id;
+				glActiveTexture(GL_TEXTURE0 + i);
+				sp->set("texture_diffuse2", i++);
+				glBindTexture(GL_TEXTURE_2D, screen_texture_id);
+				break;
+			}
+		}
+	}
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, (GLuint)indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

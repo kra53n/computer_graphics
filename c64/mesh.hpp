@@ -25,7 +25,7 @@ public:
 		glm::vec3 bi_tangent;
 	};
 
-	struct Texture
+	struct MTexture
 	{
 		GLuint id;
 		const char* type;
@@ -35,7 +35,7 @@ public:
 	std::vector<Vertex> verts;
 	Vertex::Type verts_type;
 	std::vector<GLuint> indices;
-	std::vector<Texture*> textures;
+	std::vector<MTexture*> textures;
 
 	GLuint VAO;
 
@@ -43,7 +43,7 @@ public:
 		std::vector<Vertex> verts,
 		Vertex::Type verts_type,
 		std::vector<GLuint> indices,
-		std::vector<Texture*> textures
+		std::vector<MTexture*> textures
 	);
 
 	void draw(ShaderProgram* sp);

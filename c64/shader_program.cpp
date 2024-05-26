@@ -42,7 +42,7 @@ void ShaderProgram::_link_program()
 void ShaderProgram::use()
 {
     glUseProgram(_ID);
-    _activate_textures();
+    //_activate_textures();
 }
 
 void ShaderProgram::del()
@@ -57,8 +57,8 @@ void ShaderProgram::recompile()
     _compile();
 
     use();
-    for (int i = 0; i < _textures.size(); i++)
-        set(_textures[i].get_uniform_name(), i);
+    //for (int i = 0; i < _textures.size(); i++)
+    //    set(_textures[i].get_uniform_name(), i);
 }
 
 #define fill_uniform(func_name, ...) \
@@ -84,27 +84,32 @@ void ShaderProgram::set(const char* uniform_name, const glm::vec3& val)
     fill_uniform(glUniform3f, val[0], val[1], val[2]);
 }
 
+void ShaderProgram::set(const char* uniform_name, const glm::mat2& val)
+{
+    fill_uniform(glUniformMatrix2fv, 1, GL_FALSE, &val[0][0]);
+}
+
 void ShaderProgram::set(const char* uniform_name, const glm::mat4& val)
 {
     fill_uniform(glUniformMatrix4fv, 1, GL_FALSE, &val[0][0]);
 }
 
-void ShaderProgram::set(Texture texture)
-{
-    set(texture.get_uniform_name(), (int)_textures.size());
-    _textures.push_back(texture);
-}
+//void ShaderProgram::set(Texture texture)
+//{
+//    set(texture.get_uniform_name(), (int)_textures.size());
+//    _textures.push_back(texture);
+//}
 
-void ShaderProgram::set(std::vector<Texture> textures)
-{
-    for (Texture& t : textures) set(t);
-}
+//void ShaderProgram::set(std::vector<Texture> textures)
+//{
+//    for (Texture& t : textures) set(t);
+//}
 
-void ShaderProgram::_activate_textures()
-{
-    for (int i = 0; i < _textures.size(); i++)
-    {
-        glActiveTexture(GL_TEXTURE0 + i);
-        glBindTexture(GL_TEXTURE_2D, _textures[i].ID());
-    }
-}
+//void ShaderProgram::_activate_textures()
+//{
+//    for (int i = 0; i < _textures.size(); i++)
+//    {
+//        glActiveTexture(GL_TEXTURE0 + i);
+//        glBindTexture(GL_TEXTURE_2D, _textures[i].ID());
+//    }
+//}

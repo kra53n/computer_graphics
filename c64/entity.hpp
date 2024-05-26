@@ -6,8 +6,9 @@ struct Entity
 {
 	enum class Group
 	{
-		Light,
 		Another,
+		Light,
+		Texture,
 	};
 
 	unsigned id;

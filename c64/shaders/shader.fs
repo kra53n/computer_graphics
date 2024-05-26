@@ -53,6 +53,7 @@ struct SpotLight {
 
 uniform Material material;
 uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_diffuse2;
 uniform sampler2D texture_specular1;
 uniform sampler2D texture_normal1;
 
@@ -76,12 +77,6 @@ void main()
 {
     vec3 norm = normalize(normal);
     vec3 view_dir = normalize(view_pos - frag_pos);
-
-	if (verts_type == 1)
-	{
-		frag_col = vec4(1.0);
-		return;
-	}
     
     vec3 res = vec3(0.0);
 	for (int i = 0; i < nr_dir_lights; i++)
@@ -101,12 +96,17 @@ vec3 calc_dir_light(DirLight light, vec3 normal, vec3 view_dir)
     float diff = max(dot(normal, light_dir), 0.0);
 
     vec3 reflect_dir = reflect(-light_dir, normal);
-    // float spec = pow(max(dot(view_dir, reflect_dir), 0.0), material.shininess);
-    float spec = pow(max(dot(view_dir, reflect_dir), 0.0), 2);
+    float spec = pow(max(dot(view_dir, reflect_dir), 0.0), material.shininess);
 
     vec3 ambient = light.ambient * vec3(texture(texture_diffuse1, tex_coords));
     vec3 diffuse = light.diffuse * diff * vec3(texture(texture_diffuse1, tex_coords));
     vec3 specular = light.specular * spec * vec3(texture(texture_specular1, tex_coords));
+
+	if (verts_type == 1)
+	{
+		ambient = light.ambient * vec3(texture(texture_diffuse2, tex_coords));
+		diffuse = light.diffuse * diff * vec3(texture(texture_diffuse2, tex_coords));
+	}
 
     return (ambient + diffuse + specular);
 }
@@ -125,6 +125,13 @@ vec3 calc_point_light(PointLight light, vec3 normal, vec3 frag_pos, vec3 view_di
     vec3 ambient = light.ambient * vec3(texture(texture_diffuse1, tex_coords));
     vec3 diffuse = light.diffuse * diff * vec3(texture(texture_diffuse1, tex_coords));
     vec3 specular = light.specular * spec * vec3(texture(texture_specular1, tex_coords));
+
+	if (verts_type == 1)
+	{
+		ambient = light.ambient * vec3(texture(texture_diffuse2, tex_coords));
+		diffuse = light.diffuse * diff * vec3(texture(texture_diffuse2, tex_coords));
+	}
+
     ambient *= attenuation;
     diffuse *= attenuation;
     specular *= attenuation;
@@ -150,6 +157,12 @@ vec3 calc_spot_light(SpotLight light, vec3 norm, vec3 frag_pos, vec3 view_dir)
     vec3 ambient = light.ambient * vec3(texture(texture_diffuse1, tex_coords));
 	vec3 diffuse = light.diffuse * diff * texture(texture_diffuse1, tex_coords).rgb;
 	vec3 specular = light.specular * spec * texture(texture_specular1, tex_coords).rgb;
+
+	if (verts_type == 1)
+	{
+		ambient = light.ambient * vec3(texture(texture_diffuse2, tex_coords));
+		diffuse = light.diffuse * diff * vec3(texture(texture_diffuse2, tex_coords));
+	}
 
 	ambient *= attenuation * intensity;
 	diffuse *= attenuation * intensity;
