@@ -16,7 +16,6 @@ class ShaderProgram
 
 	void _link_program();
 	void _compile();
-	//void _activate_textures();
 
 public:
 	ShaderProgram(std::vector<Shader> shaders);
@@ -33,7 +32,4 @@ public:
 	void set(const char* uniform_name, const glm::vec3& val);
 	void set(const char* uniform_name, const glm::mat2& val);
 	void set(const char* uniform_name, const glm::mat4& val);
-
-	//void set(Texture texture);
-	//void set(std::vector<Texture> texture);
 };

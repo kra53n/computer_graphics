@@ -162,6 +162,9 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader_program.use();
+		shader_program.set("time", (float)curr_frame);
+		shader_program.set("rand", (float)(rand() % 100));
+
 		shader_program.set("obj_col", { 1.0f, 0.5f, 0.31f });
 		shader_program.set("light_col", { 1.0f, 1.0f, 1.0f });
 		shader_program.set("light_pos", light_pos);
@@ -169,13 +172,14 @@ int main()
 		shader_program.set("material.shininess", 32.0f);
 
 		set_lights_for_shader_program(&shader_program);
-		//shader_program.set("spot_lights[0].pos", g_camera.get_pos());
-		//shader_program.set("spot_lights[0].dir", g_camera.get_front());
 
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
-		projection = glm::perspective(glm::radians(g_camera.get_zoom()), (float)WIN_WDT / (float)WIN_HGT, 0.1f, 100.0f);
+		int win_wdt;
+		int win_hgt;
+		glfwGetFramebufferSize(window, &win_wdt, &win_hgt);
+		projection = glm::perspective(glm::radians(g_camera.get_zoom()), (float)win_wdt / (float)win_hgt, 0.1f, 100.0f);
 		view = g_camera.get_view();
 		glm::mat4 pv = projection * view;
 		glm::mat4 vm = view * model;
