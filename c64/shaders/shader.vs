@@ -10,6 +10,7 @@ out vec3 view_light_pos;
 out vec2 tex_coords;
 
 uniform vec3 light_pos;
+uniform bool is_screen_on;
 uniform mat4 m, v, vm, pv;
 uniform mat2 rotation_matrix_for_screen_texture;
 
@@ -26,7 +27,7 @@ void main()
 	view_light_pos = vec3(v * vec4(light_pos, 1.0));
 	tex_coords = a_tex_coords * vec2(1, -1);
 
-	if (verts_type == 1)
+	if (is_screen_on && verts_type == 1)
 	{
 		tex_coords = rotation_matrix_for_screen_texture * tex_coords;
 		tex_coords.y /= 0.72;

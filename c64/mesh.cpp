@@ -87,7 +87,7 @@ void Mesh::draw(ShaderProgram* sp)
 			{
 				screen_texture_id = texture->texture_id;
 				glActiveTexture(GL_TEXTURE0 + i);
-				sp->set("texture_diffuse2", i++);
+				sp->set(("texture_diffuse" + std::to_string(diffuse_nr)).c_str(), i++);
 				glBindTexture(GL_TEXTURE_2D, screen_texture_id);
 				break;
 			}

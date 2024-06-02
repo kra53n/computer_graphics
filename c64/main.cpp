@@ -26,12 +26,13 @@ ShaderProgram* g_shader_program_ptr = NULL;
 Camera g_camera;
 
 bool g_first_mouse = true;
+bool g_is_c64_screen_on = false;
+bool g_prev_c64_screen_presseing_state = false;
 
-float
-	g_last_x = WIN_WDT / 2,
-	g_last_y = WIN_WDT / 2,
-	g_dt = 0.0f, // deltatime
-	g_lf = 0.0f; // last frame
+float g_last_x = WIN_WDT / 2;
+float g_last_y = WIN_WDT / 2;
+float g_dt = 0.0f; // deltatime
+float g_lf = 0.0f; // last frame
 
 
 GLFWwindow* create_window()
@@ -70,6 +71,14 @@ void process_input(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) g_camera.process_keyboard(Camera::RIGHT, g_dt);
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) g_camera.process_keyboard(Camera::UP, g_dt);
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) g_camera.process_keyboard(Camera::DOWN, g_dt);
+
+	if (!g_prev_c64_screen_presseing_state and glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+	{
+		g_is_c64_screen_on = g_is_c64_screen_on ^ true;
+		g_prev_c64_screen_presseing_state = true;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE)
+		g_prev_c64_screen_presseing_state = false;
 }
 
 void mouse_callback(GLFWwindow* window, double x_pos_in, double y_pos_in)
@@ -122,18 +131,11 @@ int main()
 
 	//
 
-	//
-
 	ShaderProgram shader_program({
 		Shader("shaders/shader.vs"),
 		Shader("shaders/shader.fs"),
 	});
 	g_shader_program_ptr = &shader_program;
-
-	ShaderProgram shader_program_light_cube({
-		Shader("shaders/light_cube.vs"),
-		Shader("shaders/light_cube.fs"),
-	});
 
 	//
 
@@ -170,6 +172,7 @@ int main()
 		shader_program.set("light_pos", light_pos);
 		shader_program.set("view_pos", g_camera.get_pos());
 		shader_program.set("material.shininess", 32.0f);
+		shader_program.set("is_screen_on", g_is_c64_screen_on);
 
 		set_lights_for_shader_program(&shader_program);
 
@@ -189,15 +192,6 @@ int main()
 		shader_program.set("pv", pv);
 
 		c64_model.draw(&shader_program);
-
-		shader_program_light_cube.use();
-		shader_program.set("pv", pv);
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, light_pos);
-		model = glm::scale(model, glm::vec3(0.2f));
-		shader_program_light_cube.set("m", model);
-
-		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

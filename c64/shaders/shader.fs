@@ -6,6 +6,7 @@ in vec2 tex_coords;
 out vec4 frag_col;
 
 uniform vec3 view_pos;
+uniform bool is_screen_on;
 uniform vec3 obj_col, light_col;
 
 
@@ -91,7 +92,7 @@ void main()
 	for (int i = 0; i < nr_spot_lights; i++)
 		res += calc_spot_light(spot_lights[i], norm, frag_pos, view_dir);    
     
-    frag_col = vec4(vignette(some_effect(res, 6)), 1.0);
+    frag_col = vec4(vignette(some_effect(res,6)), 1.0);
 }
 
 vec3 calc_dir_light(DirLight light, vec3 normal, vec3 view_dir)
@@ -107,7 +108,7 @@ vec3 calc_dir_light(DirLight light, vec3 normal, vec3 view_dir)
     vec3 diffuse = light.diffuse * diff * vec3(texture(texture_diffuse1, tex_coords));
     vec3 specular = light.specular * spec * vec3(texture(texture_specular1, tex_coords));
 
-	if (verts_type == 1)
+	if (is_screen_on && verts_type == 1)
 	{
 		ambient = light.ambient * vec3(texture(texture_diffuse2, tex_coords));
 		diffuse = light.diffuse * diff * vec3(texture(texture_diffuse2, tex_coords));
@@ -131,7 +132,7 @@ vec3 calc_point_light(PointLight light, vec3 normal, vec3 frag_pos, vec3 view_di
     vec3 diffuse = light.diffuse * diff * vec3(texture(texture_diffuse1, tex_coords));
     vec3 specular = light.specular * spec * vec3(texture(texture_specular1, tex_coords));
 
-	if (verts_type == 1)
+	if (is_screen_on && verts_type == 1)
 	{
 		ambient = light.ambient * vec3(texture(texture_diffuse2, tex_coords));
 		diffuse = light.diffuse * diff * vec3(texture(texture_diffuse2, tex_coords));
@@ -163,7 +164,7 @@ vec3 calc_spot_light(SpotLight light, vec3 norm, vec3 frag_pos, vec3 view_dir)
 	vec3 diffuse = light.diffuse * diff * texture(texture_diffuse1, tex_coords).rgb;
 	vec3 specular = light.specular * spec * texture(texture_specular1, tex_coords).rgb;
 
-	if (verts_type == 1)
+	if (is_screen_on && verts_type == 1)
 	{
 		ambient = light.ambient * vec3(texture(texture_diffuse2, tex_coords));
 		diffuse = light.diffuse * diff * vec3(texture(texture_diffuse2, tex_coords));
@@ -237,7 +238,8 @@ vec3 vertical_lines(vec3 col)
 
 vec3 some_effect(vec3 col, int effect_type)
 {
-	if (verts_type == VERTEX_TYPE_OTHER ||
+	if (!is_screen_on ||
+	    verts_type == VERTEX_TYPE_OTHER ||
 		verts_type != VERTEX_TYPE_SCREEN)
 		return col;
 	switch (effect_type)
@@ -263,7 +265,8 @@ vec3 some_effect(vec3 col, int effect_type)
 
 vec3 vignette(vec3 col)
 {
-	if (verts_type == VERTEX_TYPE_OTHER ||
+	if (!is_screen_on ||
+	    verts_type == VERTEX_TYPE_OTHER ||
 		verts_type != VERTEX_TYPE_SCREEN)
 		return col;
 	float x = tex_coords.x;
